@@ -42,14 +42,14 @@ jobs:
 
       - name: Check Secrets Set
         run: |
-          if [ -z "${{ vars.DOCKER_USERNAME }}" ]; then echo "DOCKER_USERNAME is EMPTY"; else echo "DOCKER_USERNAME is set"; fi
-          if [ -z "${{ vars.DOCKER_PASSWORD }}" ]; then echo "DOCKER_PASSWORD is EMPTY"; else echo "DOCKER_PASSWORD is set"; fi
+          if [ -z "${{ secrets.DOCKERUSERNAME }}" ]; then echo "DOCKER_USERNAME is EMPTY"; else echo "DOCKER_USERNAME is set"; fi
+          if [ -z "${{ secrets.DOCKERPASSWORD }}" ]; then echo "DOCKER_PASSWORD is EMPTY"; else echo "DOCKER_PASSWORD is set"; fi
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ vars.DOCKER_USERNAME }}
-          password: ${{ vars.DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKERUSERNAME }}
+          password: ${{ secrets.DOCKERPASSWORD }}
 
       - name: Log - Docker Login Success
         run: echo "Docker Hub login successful"
@@ -57,10 +57,10 @@ jobs:
       - name: Build and Push (dev)
         run: |
           echo "Building Docker image for DEV..."
-          docker build -t ${{ vars.DOCKER_USERNAME }}/go-app:dev .
+          docker build -t ${{ secrets.DOCKERUSERNAME }}/go-app:dev .
           echo "Pushing image to Docker Hub..."
-          docker push ${{ vars.DOCKER_USERNAME }}/go-app:dev
-          echo "DEV image pushed successfully: ${{ vars.DOCKER_USERNAME }}/go-app:dev"
+          docker push ${{ secrets.DOCKERUSERNAME }}/go-app:dev
+          echo "DEV image pushed successfully: ${{ secrets.DOCKERUSERNAME }}/go-app:dev"
 
   deploy-prod:
     needs: build
@@ -77,8 +77,8 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ vars.DOCKER_USERNAME }}
-          password: ${{ vars.DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKERUSERNAME }}
+          password: ${{ secrets.DOCKERPASSWORD }}
 
       - name: Log - Docker Login Success
         run: echo "Docker Hub login successful"
@@ -86,7 +86,7 @@ jobs:
       - name: Build and Push (prod)
         run: |
           echo "Building Docker image for PROD..."
-          docker build -t ${{ vars.DOCKER_USERNAME }}/go-app:prod .
+          docker build -t ${{ secrets.DOCKERUSERNAME }}/go-app:prod .
           echo "Pushing image to Docker Hub..."
-          docker push ${{ vars.DOCKER_USERNAME }}/go-app:prod
-          echo "PROD image pushed successfully: ${{ vars.DOCKER_USERNAME }}/go-app:prod"
+          docker push ${{ secrets.DOCKERUSERNAME }}/go-app:prod
+          echo "PROD image pushed successfully: ${{ secrets.DOCKERUSERNAME }}/go-app:prod"
