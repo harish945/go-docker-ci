@@ -6,7 +6,7 @@ func main() {
 	r := gin.Default()
 
 	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{"message": "CI/CD working 😏"})
+		c.JSON(200, gin.H{"message": "CI/CD working "})
 	})
 
 	r.Run(":8086")
